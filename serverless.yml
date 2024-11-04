@@ -1,0 +1,47 @@
+service: starwars-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    TABLE_NAME: StarWars
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:Scan
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE_NAME}
+
+functions:
+  createCharacter:
+    handler: handler.create
+    timeout: 60
+    events:
+      - http:
+          path: characters
+          method: post
+
+  getCharacters: 
+    handler: handler.get
+    events:
+      - http:
+          path: characters
+          method: get
+
+resources:
+  Resources:
+    StarWarsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: "nombre"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "nombre"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5

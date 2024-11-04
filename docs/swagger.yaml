@@ -1,0 +1,62 @@
+openapi: 3.0.0
+info:
+  title: Star Wars API
+  description: API para gestionar personajes de Star Wars
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+
+paths:
+  /characters:
+    get:
+      summary: Obtiene todos los personajes
+      operationId: getCharacters
+      responses:
+        '200':
+          description: Lista de personajes obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Character'
+        '500':
+          description: Error en el servidor
+
+    post:
+      summary: Crea un nuevo personaje
+      operationId: createCharacter
+      requestBody:
+        description: Datos del personaje a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+      responses:
+        '201':
+          description: Personaje creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '500':
+          description: Error en el servidor
+
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        nombre:
+          type: string
+          description: Nombre del personaje
+          example: Luke Skywalker
+        sexo:
+          type: string
+          description: Sexo del personaje
+          example: masculino
+      required:
+        - nombre
+        - sexo

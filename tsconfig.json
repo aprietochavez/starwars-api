@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "commonjs", // o "esnext" si estás usando ES Modules
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true, // Si quieres permitir importaciones de módulos comunes como en JS
+        "esModuleInterop": true,
+        // Otras opciones...
+    }
+}
